@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}課程清單 - CoursePay{% endblock %}
+
+{% block content %}
+<h2>課程清單</h2>
+
+{% if not items %}
+  <p>目前尚無可販售課程。</p>
+{% else %}
+<div class="grid" role="list">
+  {% for it in items %}
+  <article class="card" role="listitem" aria-label="{{ it.title }}">
+    <header class="card-head">
+      {% if it.badge %}<span class="badge" aria-label="課程標籤">{{ it.badge }}</span>{% endif %}
+      <h3 class="title">{{ it.title }}</h3>
+    </header>
+
+    <p class="desc">{{ it.desc }}</p>
+    <div class="price" aria-label="價格">NT$ {{ it.price_twd }}</div>
+
+    <!-- 送出至 /billing/checkout；後端只需要 course_id -->
+    <form method="post" action="{{ url_for('billing.checkout') }}">
+      <input type="hidden" name="course_id" value="{{ it.id }}">
+      <button type="submit" class="btn-buy" aria-label="購買 {{ it.title }}">購買</button>
+    </form>
+  </article>
+  {% endfor %}
+</div>
+{% endif %}
+
+<noscript>
+  <p style="color:#b91c1c; margin-top:12px;">⚠️ 為完成結帳，請開啟瀏覽器的 JavaScript。</p>
+</noscript>
+
+<style>
+  :root {
+    --border:#e5e7eb; --muted:#6b7280; --bg:#ffffff; --bg-alt:#fafafa; --ink:#111827;
+  }
+  h2 { margin: 0 0 12px; font-size: 22px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--bg); }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg-alt); color: var(--muted); }
+  .title { font-size: 18px; margin: 0; color: var(--ink); }
+  .desc { color: var(--muted); min-height: 48px; margin: 6px 0 10px; line-height: 1.5; }
+  .price { font-weight: 700; margin: 4px 0 12px; }
+  .btn-buy {
+    padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: #111827; color: #fff; cursor: pointer;
+  }
+  .btn-buy:hover { filter: brightness(0.95); }
+</style>
+{% endblock %}

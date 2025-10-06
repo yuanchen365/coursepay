@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}CoursePay{% endblock %}</title>
+
+  <!-- 你的全站樣式（可留） -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  <!-- 補充最小樣式，純 CSS，避免在 style 內寫 Jinja -->
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Arial; margin:0; background:#f7f7f9; }
+    header { padding:14px 20px; background:#111827; color:#fff; }
+    .container { max-width:980px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    nav a { color:#a5b4fc; text-decoration:none; margin-right:12px; }
+    nav a:hover { text-decoration:underline; }
+    .spacer { margin-left:auto; display:flex; gap:12px; align-items:center; }
+    main { max-width:980px; margin:24px auto; padding:0 16px; }
+    .flash { margin:12px 0; padding:10px; border-radius:8px; }
+    .flash.success { background:#e7ffe8; }
+    .flash.error { background:#ffe8e8; }
+    .flash.info { background:#eef2ff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 style="margin:0; font-size:20px;">CoursePay</h1>
+      <nav>
+        <a href="{{ url_for('index') }}">首頁</a>
+        <a href="{{ url_for('auth.health') }}">會員測試</a>
+        <a href="{{ url_for('billing.ping') }}">金流測試</a>
+        <a href="{{ url_for('speech.ping') }}">語音測試</a>
+        <a href="{{ url_for('courses') }}">課程</a>
+      </nav>
+
+      <div class="spacer">
+        {% if current_user.is_authenticated %}
+          <span style="opacity:.85;">{{ current_user.email }}</span>
+          <a href="{{ url_for('auth.logout') }}" style="color:#fca5a5;">登出</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}">登入</a>
+          <a href="{{ url_for('auth.register') }}">註冊</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {# flash 訊息，改用類別切換，避免在 style 內用 Jinja #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, text in messages %}
+          {# 將未知類別歸為 info #}
+          {% set cat = category if category in ['success','error','info'] else 'info' %}
+          <div class="flash {{ cat }}">{{ text }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

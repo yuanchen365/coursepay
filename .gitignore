@@ -1,0 +1,26 @@
+@"
+# Python / Flask
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+instance/
+
+# SQLite / 本機檔
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Build / Cache
+dist/
+build/
+"@ | Set-Content -Encoding utf8 .gitignore

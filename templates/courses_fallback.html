@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>課程清單（備援）</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Arial; padding: 20px; }
+    .err { background:#ffe8e8; padding:10px; border-radius:8px; margin-bottom:16px; }
+    pre { background:#f5f5f5; padding:10px; border-radius:8px; overflow:auto; }
+    ul { padding-left: 18px; }
+  </style>
+</head>
+<body>
+  <h1>課程清單（備援頁）</h1>
+
+  {% if error %}
+    <div class="err">
+      <b>渲染 courses.html 時發生錯誤：</b>
+      <pre>{{ error }}</pre>
+      <p>常見原因：</p>
+      <ul>
+        <li>模板中的 <code>url_for('billing.checkout')</code> 找不到端點。</li>
+        <li><code>items</code> 型別/鍵名不符（如 <code>it.id</code> / <code>it.price_twd</code>）。</li>
+      </ul>
+    </div>
+  {% endif %}
+
+  <h2>原始資料（前 5 筆）</h2>
+  <pre>{{ items[:5] | tojson(indent=2) }}</pre>
+
+  <p><a href="{{ url_for('courses') }}">回課程頁</a> · <a href="{{ url_for('index') }}">回首頁</a></p>
+</body>
+</html>

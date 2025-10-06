@@ -1,0 +1,46 @@
+<!-- templates/auth/login.html -->
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <title>登入</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Arial; padding: 24px; }
+      .wrap { max-width: 420px; margin: 0 auto; }
+      label { display:block; margin: 12px 0 4px; }
+      input { width:100%; padding:10px; box-sizing:border-box; }
+      button { margin-top:16px; padding:10px 14px; cursor:pointer; }
+      .msg { margin:12px 0; padding:10px; border-radius:6px; }
+      .msg.error { background:#ffe8e8; }
+      .msg.success { background:#e7ffe8; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>登入</h1>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, text in messages %}
+            <div class="msg {{ category }}">{{ text }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" value="{{ email or '' }}" required>
+
+        <label for="password">密碼</label>
+        <input id="password" name="password" type="password" minlength="6" required>
+
+        <button type="submit">登入</button>
+      </form>
+
+      <p style="margin-top:16px;">
+        沒有帳號？<a href="{{ url_for('auth.register') }}">前往註冊</a>
+      </p>
+    </div>
+  </body>
+</html>
